@@ -1,90 +1,172 @@
-# Top 10/20 Analysis — news-image-20261125
+# What the Top Entries Look Like — news-image-20261125
 
-Ditulis: 25 Nov 2026 ~11:50 WIB (parent watch, sebelum Goldfish review).
-Sumber: RULES.txt + competition.yaml kompetisi ini, kriteria judge (z-ai/glm-5.3-flash, 2v2),
-pola pemenang TERVERIFIKASI dari ronde 1 news-image-20261124 (gambar pemenang r1/r2/r3/r5
-dibaca langsung 25 Nov ~02:45 WIB, tercatat di entries/news-image-20261124/top10-analysis.md
-§ UPDATE RONDE 1), dan entry kita sendiri.
+Rewritten v7: 25 Nov 2026 ~15:00 WIB, after Goldfish round 6 cleared
+the v6 entry for submission. The facts below are the same ones the
+earlier analysis recorded; only the wording and the arrangement are
+new. Sources: RULES.txt and competition.yaml for this contest, the
+judge setup (z-ai/glm-5.3-flash, head-to-head 2v2), the verified
+winning pictures from news-image-20261124 round 1 (winner images for
+rounds 1, 2, 3 and 5 read directly on 25 Nov ~02:45 WIB), and our
+own entry as it stands in v6.
 
-## Status leaderboard live
+## Where the contest stands right now
 
-- Kompetisi ini blind rounds — tidak ada rank/score/entry lawan yang terlihat sebelum ronde
-  dinilai. Ronde blind #1: 25 Nov 19:00 WIB (per pola ni24: 07:00/19:00/07:00/19:00/final).
-  Ronde #1 ni25 BELUM dinilai saat analisis ini ditulis.
-- Konsekuensi: analisis ini TIDAK bisa mengutip entry lawan spesifik hari ini. Pola top entry
-  diambil dari pemenang nyata ni24 ronde 1 (cutoff: rank 1 = 863545, rank 10 = 803073,
-  rank 50 = 654221; entry kita ni24 r1: rank 4805/7302, skor 458194 — grid teks polos kalah
-  telak dari koran bergambar).
-- Setelah ronde #1 (19:00 WIB) analisis ini WAJIB di-update dengan board nyata sebelum
-  checkpoint ⅓ (~26 Nov 23:00 WIB).
+This contest runs blind rounds: no rival ranks, scores or entries
+are visible before a round is judged. Round 1 closes today,
+25 Nov at 19:00 WIB. The ni24 rhythm was 07:00 / 19:00 /
+07:00 / 19:00 / final, and ni25 is expected to follow it.
 
-## Garis hadiah (50 tempat, total $100)
+Because round 1 has not been judged yet, nothing in this note quotes
+a rival entry from today. Every pattern below comes from ni24
+round 1 winners instead. Once round 1 is judged at 19:00 WIB, this
+note has to be refreshed against the real board before the
+one-third checkpoint (~26 Nov 23:00 WIB).
 
-- 1st $20 · 2nd $12 · 3rd $6 · 4th–10th $2 · 11th–50th $1,20.
-- Target: TOP 10. Lantai: rank 25. Di luar top 50 = $0.
-- Final heat: ronde Swiss + playoff top-52; lolos ke top-52 Swiss adalah garis hidup pertama.
+## The money and the bar
 
-## Pola pemenang (terverifikasi dari gambar pemenang ni24 ronde 1)
+Fifty paid places share $100: $20 for 1st, $12 for 2nd, $6 for 3rd,
+$2 each for 4th–10th, $1.20 each for 11th–50th. The aim is the top
+10; rank 25 is the floor we will not go below; outside the top 50
+the prize is $0. The final heat is a Swiss stage plus a playoff
+for the top 52, so reaching the top 52 in the Swiss is the first
+line that has to be crossed.
 
-1. **Koran bergambar, bukan grid teks polos.** Masthead serif raksasa + tanggal lengkap
-   ("TUESDAY 24 NOVEMBER 2026"), strip jumlah cerita/region/field, region bar yang
-   jumlahnya rekonsiliasi persis, strip timeline UTC, strip "THE DAY IN NUMBERS".
-2. **3 hero besar berilustrasi vector** (headline + dek + sumber + badge status
-   CLAIM / CONFIRMED / OFFICIAL / REPORTED) + ~10 panel sekunder berilustrasi kecil +
-   daftar "ALSO ON" bernomor + peta dunia + pin bernomor.
-3. **Footer DATE CHECK yang jujur:** klaim tanggal eksplisit + daftar cerita yang SENGAJA
-   DIKECUALIKAN karena terjadi hari sebelumnya.
-4. **Breadth 34–40 cerita**, lintas region (9–10 region) dan lintas beat. Rank 1 ni24
-   juga 34 cerita — jumlah bukan pembeda; craft visual + struktur yang membedakan.
-5. **Terbaca di ~300px, faithful, tanpa garbled/overlap.** Judge menghukum klaim tanggal
-   salah dan angka yang diketahuinya salah.
+How hard the line is can be read off ni24 round 1: rank 1 scored
+863,545, rank 10 scored 803,073, and rank 50 — the last paid place
+— scored 654,221. Our own ni24 round 1 entry, a plain-text grid,
+landed at rank 4,805 of 7,302 with a score of 458,194. A grid with
+no pictures loses badly to an illustrated newspaper; that gap is
+the whole reason this entry is built the way it is.
 
-## Entry kita (dinilai terhadap pola di atas)
+## What the ni24 round 1 winners actually did
 
-- Judul: "THE WORLD IN ONE DAY / WEDNESDAY 25 NOVEMBER 2026". Format koran bergambar:
-  masthead + region bar + timeline UTC + "THE DAY IN NUMBERS" + 3 hero + 6 panel
-  sekunder + ALSO ON + footer DATE CHECK dengan daftar eksklusi jujur (17 cerita 24 Nov).
-  Pola: MENGIKUTI pola pemenang ni24 (bukan grid polos seperti ni24 r1 yang kalah).
-- Hero: (1) Shenzhou-24 lepas landas 00:18 UTC, Zeeshan Ali Pakistan pertama di orbit +
-  orang asing pertama di Tiangong; (2) Australia & Solomon Islands tanda tangan pakta
-  keamanan di Canberra 25 Nov; (3) US Army ledakkan 68 barel lead azide di Iowa 25 Nov.
-- Sekunder + ALSO ON: respons China atas pivot Solomons, 160+ ilmuwan iklim vs RUU BAAJA,
-  Huawei Watch Air 6,9 mm, Toronto biaya 911 gap $1,1 M, PAL Airlines vote mogok,
-  Inggris (konsultasi age of consent, perubahan PIP), Nigeria (NNDC dipecat),
-  16.000 telur tak aman Kozhikode, kekeringan Fiji, perikanan Vanuatu, netball Fiji A
-  68–36 Samoa, Super Bowl LXI di Imax, gempa Alaska M4.2, Shirudo (OpenAI+Cisco).
-- File: entry.png 1024×1024 JPEG, 263.286 byte, sha256
-  0639ce21ed82f2df9019d1a5b47dc49ec503a492adb0d90966c35d888e842577. main.py stdlib-only,
-  copy + verifikasi size/SHA-256/magic, 2× byte-identik (lihat build-log.md).
+Reading the winning pictures, five habits recur, and they recur
+together — no winner has only some of them:
 
-## Gap / titik rawan (untuk Goldfish — WAJIB diverifikasi)
+- **A newspaper, not a list.** A giant serif masthead with the
+  full date ("TUESDAY 24 NOVEMBER 2026" in ni24), a strip stating
+  how many stories, regions and fields are inside, a region bar
+  whose numbers add up exactly to the story count, a UTC timeline
+  strip, and a "THE DAY IN NUMBERS" strip.
+- **Three big illustrated leads**, each with headline, deck,
+  source and a status badge (CLAIM / CONFIRMED / OFFICIAL /
+  REPORTED), plus about ten smaller illustrated panels, a numbered
+  "ALSO ON" list, and a world map carrying numbered pins.
+- **A DATE CHECK footer that tells the truth**, naming the date
+  claim in plain words and then listing the stories that were
+  deliberately left out because they happened the day before.
+- **Breadth of 34–40 stories** across 9–10 regions and several
+  beats. The ni24 rank 1 also carried 34 stories, so the count
+  itself is not what separates winners — the visual craft and
+  the structure do.
+- **Readable when shrunk to about 300 px, faithful, with no
+  garbled or overlapping text.** The judge punishes a wrong date
+  claim and a number it knows to be wrong.
 
-| # | Titik rawan | Dampak |
-|---|-------------|--------|
-| 1 | **Kompilasi dini 04:00 UTC** — Amerika belum bangun; berita siang/malam 25 Nov WIB/AS tidak masuk. Footer menyebut jam kompilasi — jujur, tapi breadth siang hari hilang | Breadth vs pemenang yang mengompilasi lebih malam |
-| 2 | **Peta dunia tidak ada sebagai strip terpisah** — peta + pin hanya di dalam ilustrasi hero 2 (Canberra). Pemenang ni24 semua punya strip "WHERE IT HAPPENED" sendiri | Craft/structure kalah satu elemen pola pemenang |
-| 3 | **Tanggal tiap cerita** — 17 cerita 24 Nov sengaja dikecualikan (footer jujur), tapi tiap cerita yang DICANTUMKAN harus benar-benar terjadi/dilaporkan pertama kali 25 Nov. Verifikasi independen tiap hero + sekunder rawan-tanggal | Kriteria #1/#4 judge — satu klaim tanggal salah bisa menjatuhkan skor |
-| 4 | **Angka spesifik**: "$1,1 M" Toronto (build-log: $1,1 M gap — cek: $1,1 MILIAR atau $1,1 juta? build-log menulis "$1.1B Toronto budget gap" di satu tempat dan "biaya 911 tutup gap $1,1 M" di tempat lain — INKONSISTEN, wajib diperiksa gambar), "68 barel", "16.000 telur", "68–36", "M4.2", "6,9 mm", "160+ ilmuwan" | Angka salah = hukuman judge |
-| 5 | **Legibilitas/garbled**: file JPEG 263 KB (bukan PNG vector ~50 KB seperti pemenang ni24). Periksa teks kecil: typo, terpotong, overlap — terutama footer DATE CHECK dan ALSO ON | Keterbacaan di ~300px |
-| 6 | **Hero 2**: "tanpa pangkalan militer asing" + "Australia jadi mitra keamanan utama" — verifikasi redaksi vs sumber AP/Reuters | Faithful |
+## Our entry, measured against those habits
 
-## Estimasi awal (parent, sebelum Goldfish)
+The masthead reads "THE WORLD IN ONE DAY / WEDNESDAY 25 NOVEMBER
+2026". The page is an illustrated newspaper: masthead, region bar,
+UTC timeline, "THE DAY IN NUMBERS", three heroes, ten secondary
+panels, a numbered ALSO ON list (#14–34), a world map with pins,
+and a DATE CHECK footer with an honest exclusion list of the big
+24 Nov stories deliberately left out. That is the winner's shape,
+not the plain grid that lost in ni24 round 1. The three heroes
+are: (1) Shenzhou-24 lifting off at 00:18 UTC, with Zeeshan Ali
+the first Pakistani in orbit and the first foreigner aboard
+Tiangong; (2) Australia and Solomon Islands signing a security
+pact in Canberra on 25 Nov; (3) the US Army detonating 68 barrels
+of lead azide in Iowa on 25 Nov. The numbers strip reads 4.9% ·
+68 · 187 · 25,113 · 2,212. The ten secondary
+panels and the 21 ALSO ON rows bring the total to 34 stories; among
+the items Goldfish verified in rounds 4–6 are Korea births jumping
+12.2% in September (25,113, #16), Korea mortgage rates at a 14-year
+high (#26), Seoul weighing tech to stop AI exam cheating (#27),
+Hyundai Mobis winning $742M in parts orders (#31), and FM Cho
+urging strategic aid at KOICA (#33), alongside the two v6
+replacements described below.
 
-- Rank: top 25 plausible, top 50 likely bila fakta bersih. Peluang top 50: ~40–50%.
-- Estimasi ini WAJIB dikonfirmasi/dikoreksi Goldfish — bukan angka final. Bila Goldfish
-  menemukan blocker tanggal/angka, perbaiki dulu (1 ronde fix) lalu re-review.
+The file is entry.png, 1024×1024 JPEG, 325,798 bytes, sha256
+4967825d8cf7ba7e29f8f7815c8fc2cda0fc26af27f94cd4d0b705e78b689a7a.
+The runner is main.py, standard library only: copy plus a check
+of size, SHA-256 and magic bytes, verified byte-identical across
+two runs (see build-log.md).
 
-## Update v4 — micro-fix (25 Nov ~13:05 WIB, pasca Goldfish-r3)
+## What changed in v6, and why it matters
 
-Goldfish-r3 masih LAYAK LANJUT: B1 terbuka (3 gagal + 1 abu-abu) + M5 baru
-(#31 duplikat tema #22). v4 mengganti kelimanya dengan cerita Yonhap yang
-semuanya diverifikasi primer sebagai laporan pertama Rabu 25 Nov 2026
-(bukan tanggal halaman live-blog): #11 Lee vows domestic-violence law fix,
-#26 Korea mortgage rates 14-year high, #27 Seoul weighs AI exam-cheating
-tech, #33 FM Cho urges strategic aid at KOICA, #31 Hyundai Mobis wins
-$742M parts orders. Region bar berubah jadi APAC 25 · AMERICAS 4 ·
-EUROPE 4 · MIDDLE EAST 1 = 34 (Afrika + Culture hilang; APAC-heavy 25/34
-adalah harga dari stok cerita bersih yang tersisa — kebersihan tanggal
-(blocker) di atas keseimbangan regional). Numbers strip tidak berubah.
-Estimasi bila ke-5 pengganti lolos Goldfish r4: rank ~50–150, top-50
-~35–45% (proyeksi Goldfish-r3) — menunggu verifikasi Goldfish r4.
+Goldfish round 5 had reopened the date blocker: #30 (Blanche
+dodging an Nvidia probe) failed — the presser was Tuesday 24 Nov
+and the BBC published it at 2026-11-24T21:45:46Z — and #19 (Guam
+El Niño drought risk) leaned fail, its substance running 18–24 Nov.
+Version 6 replaced both with stories verified from their primary
+outlets as first reported on Wednesday 25 Nov: #30 became German
+GDP growing just 0.1% in Q3 (Reuters, published
+2026-11-25T07:01:40Z; the Destatis detailed release was scheduled
+for Wed 25 Nov 08:00 Berlin = 07:00 UTC), and #19 became Japan
+services inflation jumping 4.2% (Reuters, URL slug 2026-11-25;
+Bank of Japan services PPI, October +4.2% year on year, September
+revised to 3.8%). In the same round the #15 headline was softened
+— "first in 5 months" was dropped because it is not in the AJP
+body — the map pins labelled 9-10 and 4-5 were widened so their
+labels fit inside the circles, and the footer exclusions were
+updated to open with the two v5 failures plus the v6 rejects (the
+UN femicide brief of 24 Nov, the Sarkozy–Bruni trial order of
+24 Nov, the North Korea Christians report of 24 Nov). The region
+bar was recomputed to APAC 23 · AMERICAS 2 · EUROPE 6 ·
+MIDDLE EAST 1 · AFRICA 2, which adds to 34. The numbers strip was
+left untouched, because no figure in it came from #19 or #30.
+
+## Where Goldfish round 6 left us
+
+Goldfish's short re-review of v6 (25 Nov ~14:50 WIB) verified
+both replacements directly from Reuters and confirmed the
+fixer's tally: **32 items clean, 2 grey-leaning-pass (#6 Houthis,
+#14 bigeye tuna), 0 failed.** Verdict: LAYAK SUBMIT, before the
+round 1 cutoff at 19:00 WIB today. The region bar was recount-checked
+from the picture and reconciles; the #15 softening and the wider
+9-10 / 4-5 pins were confirmed on the page; the footer reads in
+full, compiled ~07:35 UTC, with the German GDP release of 07:01 UTC
+inside the compilation window.
+
+Goldfish's honest estimate for v6, modelling a field of roughly
+7,000–9,000 entries with hundreds of competent clones of the same
+winner template (ni24 round 1 had 7,302 entries), is **rank
+~50–150, top-50 chance ~30–40%, top-10 chance ~3–5%**. That is the
+chase-top-10 floor, not a promise: the prize line in ni24 round 1
+(rank 50 = 654,221) demands a high win rate, and an estimate that
+only compares against the top 3 is how ni24 round 1 was misjudged
+(estimated top 10–25, landed rank 4,805).
+
+## What still holds the entry back
+
+| Weakness | Why it costs us |
+|---|---|
+| **APAC/Korea concentration (M6).** APAC is 23 of 34 stories, about 14 of them Korea-themed, across only 5 regions; Latin America has none, and Oceania is not a region of its own | In a 2v2 against a winner spread over 9–10 regions, this can read as "a Korean paper plus the world" |
+| **Two grey items left (#6, #14).** Both lean pass and are unchanged since round 4/5, but both are fragile if the judge checks dates strictly | A single date failure is the most heavily punished error class |
+| **Compiled ~07:35 UTC — early.** US daytime news on 25 Nov is not in the paper, and the footer says so honestly | Breadth from the later part of the day is missing |
+| **Secondary panels carry no illustration; the numbers strip has 5 statistics** (the playbook pattern is 6) | Visual craft trails the ni24 winners by one element each |
+| **The field is cloned.** Hundreds of entries now copy the same winner template, so craft alone no longer separates entries the way it did in ni24 | Small date or craft slips decide paid vs unpaid |
+
+None of these is a blocker, and none justifies opening a new fix
+round before the 19:00 WIB cutoff: swapping a clean-dated Korean
+story for a non-Korean story with a shaky date would reopen the
+date blocker that took five rounds to close. The trade-off is
+deliberate and recorded — date cleanliness first, regional balance
+second.
+
+## Playbook rules this entry follows
+
+- Target top 10, floor rank 25, and treat anything outside the
+  top 50 as $0; never inflate an estimate by comparing only
+  against the top 3.
+- Every story must be first reported on 25 Nov 2026 from its
+  primary outlet — the aggregator's re-post stamp does not count,
+  and a live-blog page does not prove its contents are from today.
+- The region bar must reconcile exactly to 34, and the numbers
+  strip must only cite figures from stories still on the page.
+- The DATE CHECK footer must name what was excluded and when the
+  paper was compiled, in plain words.
+- No submit without a Goldfish verdict of LAYAK SUBMIT and a
+  byte-identical double run of main.py; the entry is not reported
+  ready until the top-10 analysis and Goldfish's verdict are both
+  on record.
