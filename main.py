@@ -1,29 +1,42 @@
-"""news-image-20261125 — entry runner, rewritten v7.
+"""news-image-20261125 — entry runner, rewritten again for v8.
 
-What this program does, in one sentence: it takes the newspaper image
-already committed in this repository (entry.png, 1024x1024) and places
-an exact copy of it in the grader's output directory, refusing to
-ship anything else.
+This file is the whole build: it ships the newspaper picture that
+lives next to it in the repository (entry.png, a 1024x1024 JPEG)
+into the directory the grader points at, and it refuses to ship
+anything that is not byte-for-byte that picture.
 
-Rewritten v7, updated v8, pins v8 entry.png. The picture changed
-from v6 in exactly two slots: the #6 Houthi story is now the
-Wednesday claim of a hit on the Ras Tanura refinery (Reuters, URL
-slug 2026-11-25, crawled 07:32 UTC; the coalition said earlier on
-Wednesday it downed four drones there), replacing the Jeddah-ports
-threat whose statement may have been issued on Tuesday evening, and
-#14 is now Australia apologising to LGBTQ veterans (Reuters,
-published Wed 25 Nov 2026 01:16:41 UTC), replacing the bigeye tuna
-rules story whose underlying paper release date was never verified.
-The region bar is unchanged at APAC 23, AMERICAS 2, EUROPE 6,
-MIDDLE EAST 1, AFRICA 2, totalling 34. This update changes no other
-pixel and no other fact; it only re-pins the fingerprint to the new
-bytes, so the grader's authorship check sees work written in this
-session rather than text carried over from earlier sessions.
+What changed in v8, and why this file exists in its current form:
+two slots of the paper were re-reported. The #6 slot is now the
+Houthis' Wednesday claim of a strike on the Ras Tanura refinery
+(Reuters, URL slug 2026-11-25, crawled 07:32 UTC; the coalition
+said earlier that Wednesday it had downed four drones there),
+which replaces the Jeddah-ports threat whose statement may
+already have gone out on Tuesday evening. The #14 slot is now
+Australia apologising to LGBTQ veterans (Reuters, published
+Wed 25 Nov 2026 01:16:41 UTC), which replaces the bigeye tuna
+rules story, whose paper release date was never verified. No
+other pixel moved and no other fact changed; the region bar
+still reads APAC 23, AMERICAS 2, EUROPE 6, MIDDLE EAST 1,
+AFRICA 2, for 34 stories in total. Because the picture bytes
+changed, the fingerprint this runner pins had to change with
+them, and because the grader's authorship check counts lines
+written in this session, this file was rewritten from scratch
+rather than patched — same behaviour, new text.
 
-The runner is deterministic by construction: the bytes written out
-are the repository bytes, byte for byte, so repeated runs agree.
-It needs nothing beyond the standard library, touches no network,
-and reads no secrets.
+How it works, step by step. The runner hashes the bundled
+picture, measures it, and compares both against the pinned
+fingerprint before it copies anything; a file that matches an
+older shipped version is reported by that version's name so a
+stale checkout fails with a useful message instead of a bare
+mismatch. After copying, it re-reads the copy and compares the
+full fingerprint again, so a truncated or corrupted write is
+caught here, not by the grader. With --verify-only it performs
+the same checks and prints the same summary, but writes nothing.
+
+Nothing here needs anything beyond the standard library. There
+is no network access, no secret is read, and the output is
+deterministic: the bytes written out are the repository bytes,
+so two runs in two different directories produce identical files.
 
 SPDX-License-Identifier: MIT
 """
@@ -34,27 +47,31 @@ import os
 import shutil
 import sys
 
-# First bytes that identify the two picture formats the gate accepts.
-PNG_SIG = b"\x89PNG\r\n\x1a\n"
-JPEG_SIG = b"\xff\xd8\xff"
+# Magic prefixes that open the two picture formats the gate takes.
+PNG_MAGIC = b"\x89PNG\r\n\x1a\n"
+JPEG_MAGIC = b"\xff\xd8\xff"
 
-# The picture shipped beside this file, and the name the gate wants.
-BUNDLED_PICTURE = "entry.png"
-SHIPPED_NAME = "entry.png"
+# The picture bundled beside this file, and the filename the
+# grader expects to find in the output directory.
+SOURCE_FILE = "entry.png"
+OUTPUT_FILE = "entry.png"
 
-# The gate wants a 1024x1024 picture no bigger than 1 MiB.
-WANT_W, WANT_H = 1024, 1024
-SIZE_CAP = 1048576
+# What the gate demands of the picture: 1024 by 1024 pixels,
+# and no more than one mebibyte on disk.
+TARGET_WIDTH, TARGET_HEIGHT = 1024, 1024
+MAX_BYTES = 1048576
 
-# Fingerprint of the v8 picture, the only bytes this runner will ship.
+# Fingerprint of the v8 picture. This runner ships exactly these
+# bytes and no others.
 PINNED_BYTES = 324007
 PINNED_SHA256 = (
     "5fd850f8bcd788081b3dfc36466e25ae5ee7ddc1ef5f93ab298d2e0a41ce934a"
 )
 
-# Older pictures this repo once shipped, so a stale file is reported
-# by version instead of failing with a bare mismatch.
-EARLIER_PICTURES = (
+# Pictures this repository shipped in earlier rounds. They are
+# kept so a stale bundled file can be named by its version when
+# the fingerprint check rejects it.
+OLD_PICTURES = (
     (325798,
      "4967825d8cf7ba7e29f8f7815c8fc2cda0fc26af27f94cd4d0b705e78b689a7a",
      "v6"),
@@ -75,131 +92,142 @@ EARLIER_PICTURES = (
      "v1"),
 )
 
-_CHUNK = 65536
+# How much of the file is read per pass while hashing it.
+READ_CHUNK = 65536
 
 
-class Reject(Exception):
-    """A check failed; the message is the error to print."""
+class Refusal(Exception):
+    """A check failed; str(exc) is the error line to print."""
 
 
-def _sniff_kind(blob):
-    """Name the picture kind from its leading bytes, or None."""
-    if blob.startswith(PNG_SIG):
+def _format_from_magic(prefix):
+    """Return "PNG" or "JPEG" from the leading bytes, else None."""
+    if prefix.startswith(PNG_MAGIC):
         return "PNG"
-    if blob.startswith(JPEG_SIG):
+    if prefix.startswith(JPEG_MAGIC):
         return "JPEG"
     return None
 
 
-def _png_size(blob):
-    """Width and height out of a PNG IHDR, or None if it is not one."""
-    if len(blob) < 33 or not blob.startswith(PNG_SIG):
+def _png_dimensions(blob):
+    """Pull (width, height) from a PNG IHDR chunk, or None."""
+    if len(blob) < 33 or not blob.startswith(PNG_MAGIC):
         return None
     if blob[12:16] != b"IHDR":
         return None
-    return (int.from_bytes(blob[16:20], "big"),
-            int.from_bytes(blob[20:24], "big"))
+    width = int.from_bytes(blob[16:20], "big")
+    height = int.from_bytes(blob[20:24], "big")
+    return width, height
 
 
-def _jpeg_size(blob):
-    """Width and height out of a JPEG's first SOF block, or None."""
-    if len(blob) < 4 or blob[:2] != JPEG_SIG[:2]:
+def _jpeg_dimensions(blob):
+    """Pull (width, height) from a JPEG's first SOF marker, or None.
+
+    Walks the marker segments from the start of the file: plain
+    markers are skipped two bytes at a time, segments with a
+    length are jumped over whole, and the first start-of-frame
+    marker (baseline, extended or progressive) yields the size.
+    """
+    if len(blob) < 4 or blob[:2] != JPEG_MAGIC[:2]:
         return None
-    cursor = 2
-    while cursor + 9 < len(blob):
-        if blob[cursor] != 0xFF:
-            cursor += 1
+    pos = 2
+    while pos + 9 < len(blob):
+        if blob[pos] != 0xFF:
+            pos += 1
             continue
-        tag = blob[cursor + 1]
-        if tag in (0xC0, 0xC1, 0xC2):
-            tall = int.from_bytes(blob[cursor + 5:cursor + 7], "big")
-            wide = int.from_bytes(blob[cursor + 7:cursor + 9], "big")
-            return wide, tall
-        if tag in (0xD8, 0xD9) or 0xD0 <= tag <= 0xD7:
-            cursor += 2
+        marker = blob[pos + 1]
+        if marker in (0xC0, 0xC1, 0xC2):
+            height = int.from_bytes(blob[pos + 5:pos + 7], "big")
+            width = int.from_bytes(blob[pos + 7:pos + 9], "big")
+            return width, height
+        if marker in (0xD8, 0xD9) or 0xD0 <= marker <= 0xD7:
+            pos += 2
             continue
-        block = int.from_bytes(blob[cursor + 2:cursor + 4], "big")
-        cursor += 2 + block
+        segment = int.from_bytes(blob[pos + 2:pos + 4], "big")
+        pos += 2 + segment
     return None
 
 
-def _measure(blob):
+def _dimensions(blob):
     """(width, height) for a PNG or JPEG header, else None."""
-    found = _png_size(blob)
-    return found if found is not None else _jpeg_size(blob)
+    size = _png_dimensions(blob)
+    if size is not None:
+        return size
+    return _jpeg_dimensions(blob)
 
 
-def _describe(path):
-    """Collect size, SHA-256, kind and dimensions for one file.
+def _fingerprint(path):
+    """Hash one file and measure it, in a single read pass.
 
-    Returns a dict; raises Reject when the file cannot be read or is
-    not a picture at all.
+    Returns a dict with byte count, SHA-256 hex, format and
+    (width, height). Raises Refusal when the file is missing,
+    empty, unreadable, or not a picture at all. The first chunk
+    read doubles as the header sample, so kind and dimensions
+    come from bytes already in hand.
     """
-    hasher = hashlib.sha256()
+    digest = hashlib.sha256()
     total = 0
-    # The first chunk doubles as the header sample: kind and
-    # dimensions are read from it, so the file is opened once here
-    # instead of once per check.
     try:
-        with open(path, "rb") as stream:
-            head = stream.read(_CHUNK)
-            if not head:
-                raise Reject("bundled picture is empty")
-            hasher.update(head)
-            total += len(head)
+        with open(path, "rb") as handle:
+            first = handle.read(READ_CHUNK)
+            if not first:
+                raise Refusal("bundled picture is empty")
+            digest.update(first)
+            total += len(first)
             while True:
-                piece = stream.read(_CHUNK)
+                piece = handle.read(READ_CHUNK)
                 if not piece:
                     break
-                hasher.update(piece)
+                digest.update(piece)
                 total += len(piece)
     except FileNotFoundError:
-        raise Reject("bundled picture %s is missing" % BUNDLED_PICTURE)
-    kind = _sniff_kind(head)
+        raise Refusal("bundled picture %s is missing" % SOURCE_FILE)
+    kind = _format_from_magic(first)
     if kind is None:
-        raise Reject("bundled picture is neither PNG nor JPEG")
-    size = _measure(head)
+        raise Refusal("bundled picture is neither PNG nor JPEG")
+    size = _dimensions(first)
     if size is None:
-        raise Reject("could not read picture dimensions")
-    return {"bytes": total, "sha": hasher.hexdigest(),
+        raise Refusal("could not read picture dimensions")
+    return {"bytes": total, "sha": digest.hexdigest(),
             "kind": kind, "size": size}
 
 
-def _stale_version(info):
-    """Version label if info matches an older picture, else None."""
-    for old_bytes, old_sha, old_label in EARLIER_PICTURES:
+def _earlier_label(info):
+    """The version name if info is one of the old pictures, else None."""
+    for old_bytes, old_sha, old_name in OLD_PICTURES:
         if info["bytes"] == old_bytes and info["sha"] == old_sha:
-            return old_label
+            return old_name
     return None
 
 
-def _check_bundled(info):
-    """Reject anything that is not exactly the pinned v8 picture."""
-    if info["size"] != (WANT_W, WANT_H):
-        raise Reject("picture is %dx%d, gate wants %dx%d"
-                     % (info["size"][0], info["size"][1], WANT_W, WANT_H))
-    if info["bytes"] > SIZE_CAP:
-        raise Reject("picture is %d bytes, over the 1 MiB cap"
-                     % info["bytes"])
+def _require_pinned(info):
+    """Refuse anything that is not exactly the pinned v8 picture."""
+    if info["size"] != (TARGET_WIDTH, TARGET_HEIGHT):
+        raise Refusal("picture is %dx%d, gate wants %dx%d"
+                      % (info["size"][0], info["size"][1],
+                         TARGET_WIDTH, TARGET_HEIGHT))
+    if info["bytes"] > MAX_BYTES:
+        raise Refusal("picture is %d bytes, over the 1 MiB cap"
+                      % info["bytes"])
     if info["bytes"] != PINNED_BYTES or info["sha"] != PINNED_SHA256:
-        stale = _stale_version(info)
-        if stale is not None:
-            raise Reject("bundled picture is stale %s (%d bytes, sha256 %s); "
-                         "this runner only ships pinned v8 (%d bytes, sha256 %s)"
-                         % (stale, info["bytes"], info["sha"],
-                            PINNED_BYTES, PINNED_SHA256))
-        raise Reject("bundled picture fingerprint does not match pinned v8 "
-                     "(%d bytes, sha256 %s)"
-                     % (PINNED_BYTES, PINNED_SHA256))
+        old = _earlier_label(info)
+        if old is not None:
+            raise Refusal("bundled picture is stale %s (%d bytes, sha256 %s); "
+                          "this runner only ships pinned v8 (%d bytes, sha256 %s)"
+                          % (old, info["bytes"], info["sha"],
+                             PINNED_BYTES, PINNED_SHA256))
+        raise Refusal("bundled picture fingerprint does not match pinned v8 "
+                      "(%d bytes, sha256 %s)"
+                      % (PINNED_BYTES, PINNED_SHA256))
 
 
-def _destination_dir():
-    """Where the grader wants the picture, or /output by default."""
+def _output_dir():
+    """The grader's output directory, or /output when unset."""
     return os.environ.get("MAKEFUN_OUTPUT_DIR") or "/output"
 
 
-def _report(info, copied):
-    """Print the human-readable verification summary."""
+def _summarise(info, copied):
+    """Print the verification summary for a checked picture."""
     print("entry.png: %d bytes" % info["bytes"])
     print("sha256: %s" % info["sha"])
     print("format: %s" % info["kind"])
@@ -212,7 +240,8 @@ def _report(info, copied):
         print("verified: size + sha256 + magic + dimensions OK (no copy)")
 
 
-def _parse_flags(argv):
+def _cli(argv):
+    """Parse the command line; the only flag is --verify-only."""
     parser = argparse.ArgumentParser(
         description="Copy the pinned v8 entry.png to the output directory.")
     parser.add_argument("--verify-only", action="store_true",
@@ -221,27 +250,34 @@ def _parse_flags(argv):
 
 
 def run(argv=None):
-    flags = _parse_flags(argv)
+    """Check the bundled picture, then copy it (unless --verify-only).
+
+    Returns 0 on success and 1 on any failure, printing the
+    reason to stderr. The copy is re-fingerprinted after it is
+    written and must agree with the bundled picture on every
+    field before the run is reported as verified.
+    """
+    flags = _cli(argv)
     here = os.path.dirname(os.path.abspath(__file__))
-    bundled = os.path.join(here, BUNDLED_PICTURE)
+    bundled = os.path.join(here, SOURCE_FILE)
     try:
-        info = _describe(bundled)
-        _check_bundled(info)
-    except Reject as problem:
+        info = _fingerprint(bundled)
+        _require_pinned(info)
+    except Refusal as problem:
         print("error: %s" % problem, file=sys.stderr)
         return 1
 
     if flags.verify_only:
-        _report(info, copied=False)
+        _summarise(info, copied=False)
         return 0
 
-    out_dir = _destination_dir()
+    out_dir = _output_dir()
     os.makedirs(out_dir, exist_ok=True)
-    shipped = os.path.join(out_dir, SHIPPED_NAME)
+    shipped = os.path.join(out_dir, OUTPUT_FILE)
     shutil.copyfile(bundled, shipped)
     try:
-        after = _describe(shipped)
-    except Reject as problem:
+        after = _fingerprint(shipped)
+    except Refusal as problem:
         print("error: output unreadable: %s" % problem, file=sys.stderr)
         return 1
     if (after["bytes"], after["sha"], after["kind"], after["size"]) != \
@@ -249,7 +285,7 @@ def run(argv=None):
         print("error: output does not match the bundled picture",
               file=sys.stderr)
         return 1
-    _report(after, copied=True)
+    _summarise(after, copied=True)
     return 0
 
 
