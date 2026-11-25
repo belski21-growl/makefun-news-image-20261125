@@ -86,8 +86,9 @@ Hyundai Mobis winning $742M in parts orders (#31), and FM Cho
 urging strategic aid at KOICA (#33), alongside the two v6
 replacements described below.
 
-The file is entry.png, 1024×1024 JPEG, 325,798 bytes, sha256
-4967825d8cf7ba7e29f8f7815c8fc2cda0fc26af27f94cd4d0b705e78b689a7a.
+The file is entry.png, 1024×1024 JPEG, 324,007 bytes, sha256
+5fd850f8bcd788081b3dfc36466e25ae5ee7ddc1ef5f93ab298d2e0a41ce934a
+(v8; v6 was 325,798 bytes, sha256 4967825d…89a7a — superseded).
 The runner is main.py, standard library only: copy plus a check
 of size, SHA-256 and magic bytes, verified byte-identical across
 two runs (see build-log.md).
@@ -116,6 +117,41 @@ bar was recomputed to APAC 23 · AMERICAS 2 · EUROPE 6 ·
 MIDDLE EAST 1 · AFRICA 2, which adds to 34. The numbers strip was
 left untouched, because no figure in it came from #19 or #30.
 
+## What changed in v8, and why it matters
+
+The coordinator's verification at ~15:10 WIB on 25 Nov found both
+remaining grey items more fragile than round 5 had judged them: the
+#6 Houthi statement was also reported by Roya News and the Jerusalem
+Post with 24 Nov dates, so it may have been issued on Tuesday
+evening, and the #14 bigeye tuna paper's own release date was never
+verified, with the topic already announced by the FFA on 31 Oct and
+related PINA bigeye articles on 23–24 Nov. Version 8 replaces both
+with stories verified from their primary outlets as first reported
+on Wednesday 25 Nov: #6 became the Houthis' claim of a hit on the
+Ras Tanura refinery (Reuters, URL slug 2026-11-25, crawled 07:32
+UTC; the coalition said earlier on Wednesday it had downed four
+drones there; cross-checked against the Maritime Executive, which
+reported the Ras Tanura strike in the early hours of Wednesday
+morning with satellite and NASA FIRMS fire evidence — the
+headline and deck foreground the refinery only, because the
+Riyadh-district half of the claim is Tuesday's strike), and #14
+became Australia apologising to LGBTQ veterans (Reuters, published
+Wed 25 Nov 2026 01:16:41 UTC; the formal apology was issued on
+Wednesday in a speech to parliament). The pin for #6 moved from
+Jeddah to Ras Tanura, the footer exclusions now open with the two
+retired grey items, and the compilation time moved to ~08:05 UTC.
+The region bar is unchanged (APAC 23 · AMERICAS 2 · EUROPE 6 ·
+MIDDLE EAST 1 · AFRICA 2 = 34) and the numbers strip is untouched,
+because no figure in it came from #6 or #14. If Goldfish round 7
+confirms both replacements, the entry stands at 34 clean, 0 grey,
+0 failed — the date blocker closed outright rather than merely
+leaning pass. The known cost is a third Australia story in the
+paper; cleanliness outranks balance, and no cleaner non-Australia
+APAC candidate was found in the afternoon cycle (the Nigerian
+monarch suspension was announced Tuesday 24 Nov; the KOSPI
+afternoon slide duplicates #22; the WCPFC "to decide" piece
+duplicates the #14 topic itself).
+
 ## Where Goldfish round 6 left us
 
 Goldfish's short re-review of v6 (25 Nov ~14:50 WIB) verified
@@ -142,8 +178,8 @@ only compares against the top 3 is how ni24 round 1 was misjudged
 | Weakness | Why it costs us |
 |---|---|
 | **APAC/Korea concentration (M6).** APAC is 23 of 34 stories, about 14 of them Korea-themed, across only 5 regions; Latin America has none, and Oceania is not a region of its own | In a 2v2 against a winner spread over 9–10 regions, this can read as "a Korean paper plus the world" |
-| **Two grey items left (#6, #14).** Both lean pass and are unchanged since round 4/5, but both are fragile if the judge checks dates strictly | A single date failure is the most heavily punished error class |
-| **Compiled ~07:35 UTC — early.** US daytime news on 25 Nov is not in the paper, and the footer says so honestly | Breadth from the later part of the day is missing |
+| **Two grey items left (#6, #14) — replaced in v8.** Both leaned pass and were unchanged since round 4/5, but both were fragile if the judge checks dates strictly | A single date failure is the most heavily punished error class; v8 swaps both for primary-verified Wed-first-reported stories (Ras Tanura claim, Australia LGBTQ apology) — awaiting Goldfish round 7 to confirm |
+| **Compiled ~08:05 UTC — early.** US daytime news on 25 Nov is not in the paper, and the footer says so honestly | Breadth from the later part of the day is missing |
 | **Secondary panels carry no illustration; the numbers strip has 5 statistics** (the playbook pattern is 6) | Visual craft trails the ni24 winners by one element each |
 | **The field is cloned.** Hundreds of entries now copy the same winner template, so craft alone no longer separates entries the way it did in ni24 | Small date or craft slips decide paid vs unpaid |
 
