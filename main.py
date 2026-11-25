@@ -1,15 +1,23 @@
-"""news-image-20261125 entry program (v4).
+"""news-image-20261125 entry program (v6).
 
 Copies the pre-built newspaper image (entry.png, 1024x1024) to the
 output directory as entry.png, verifying integrity (size, SHA-256 and
 image magic bytes) before and after the copy.
 
-v4: micro-fix of the 4 remaining Goldfish-r3 date-fail items (#11, #26,
-#27, #33) plus the #31 KOSPI duplicate-theme major (M5). All 5
-replacements are primary-verified as first reported Wed 25 Nov 2026
-(Yonhap). This program pins the v4 fingerprint (EXPECTED_SHA256 /
-EXPECTED_SIZE) and refuses to ship any other bytes, so a stale v3
-image can never be submitted by mistake.
+v6: Goldfish-r5 micro-fix. Of the v5 tally, #30 Blanche-Nvidia FAILED
+(presser Tue 24 Nov; BBC published 2026-11-24T21:45:46Z) and #19 Guam
+El Nino was grey-leaning-fail (substance 18-24 Nov); both replaced
+with primary-verified 25 Nov stories (#30 German GDP +0.1% in Q3 /
+Reuters 2026-11-25T07:01:40Z; #19 Japan services inflation +4.2% /
+Reuters, slug 2026-11-25). Region bar rebalanced to APAC 23, AMERICAS
+2, EUROPE 6, MIDDLE EAST 1, AFRICA 2 (= 34); #15 headline softened
+("first in 5 months" dropped — not in the AJP body); map pins 9-10 /
+4-5 widened so their labels fit; footer exclusions updated with the
+v6 research (Blanche, Guam, UN femicide brief, Sarkozy-Bruni trial
+order, N. Korea Christians report). Numbers strip untouched (no
+figure came from #19/#30). This program pins the v6 fingerprint
+(EXPECTED_SHA256 / EXPECTED_SIZE) and refuses to ship any other
+bytes, so a stale v5 image can never be submitted by mistake.
 
 Deterministic: the output bytes are exactly the repository bytes, so
 both grader runs write identical files. Standard library only, no
@@ -38,16 +46,21 @@ OUTPUT_NAME = "entry.png"
 EXPECTED_WIDTH = 1024
 EXPECTED_HEIGHT = 1024
 
-# v4 pinned fingerprint (entry.png rebuilt 25 Nov 2026 ~05:50 UTC after the
-# micro-fix of the 4 remaining Goldfish-r3 date-fail items + the #31
-# KOSPI duplicate). Any other bytes are rejected.
-EXPECTED_SIZE = 272076
-EXPECTED_SHA256 = "4edbd9944d3a228978d479f762b8c0c4c55667575fd5311fa9d51e703c5c64ed"
+# v6 pinned fingerprint (entry.png rebuilt 25 Nov 2026 ~07:35 UTC after the
+# Goldfish-r5 micro-fix). Any other bytes are rejected.
+EXPECTED_SIZE = 325798
+EXPECTED_SHA256 = "4967825d8cf7ba7e29f8f7815c8fc2cda0fc26af27f94cd4d0b705e78b689a7a"
 
 # Known stale fingerprints: (size, sha256, version). If the source image
 # matches one of these, the error names the stale version explicitly so a
-# wrong-version image is never silently shipped as v4.
+# wrong-version image is never silently shipped as v6.
 PREVIOUS_FINGERPRINTS = (
+    (322851,
+     "8e07008437dd49cc8e494b0b493e496faddae40da4a3d9f5a233802864285a97",
+     "v5"),
+    (272076,
+     "4edbd9944d3a228978d479f762b8c0c4c55667575fd5311fa9d51e703c5c64ed",
+     "v4"),
     (276540,
      "df4a30ca10053c6005b37b0c2a82dbddd0d1699f2f7f50f8f857df5fab136f6c",
      "v3"),
@@ -159,11 +172,11 @@ def main(argv=None):
         for old_size, old_sha, old_ver in PREVIOUS_FINGERPRINTS:
             if src_size == old_size and src_sha == old_sha:
                 print("error: source is stale %s (%d bytes sha256 %s); "
-                      "expected v4 %d bytes sha256 %s"
+                      "expected v6 %d bytes sha256 %s"
                       % (old_ver, old_size, old_sha,
                          EXPECTED_SIZE, EXPECTED_SHA256), file=sys.stderr)
                 return 1
-        print("error: source fingerprint mismatch: expected v4 %d bytes "
+        print("error: source fingerprint mismatch: expected v6 %d bytes "
               "sha256 %s" % (EXPECTED_SIZE, EXPECTED_SHA256), file=sys.stderr)
         return 1
 
@@ -171,7 +184,7 @@ def main(argv=None):
         print("entry.png: %d bytes" % src_size)
         print("sha256: %s" % src_sha)
         print("dimensions: %dx%d" % src_dims)
-        print("fingerprint: matches pinned v4 (size + sha256)")
+        print("fingerprint: matches pinned v6 (size + sha256)")
         print("verified: size + sha256 + magic + dimensions OK (no copy)")
         return 0
 
